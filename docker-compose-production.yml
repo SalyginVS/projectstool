@@ -13,19 +13,23 @@ services:
         environment:
             APP_SECRET: ${PROJECTSTOOL_APP_SECRET}
             DATABASE_URL: pgsql://app:${PROJECTSTOOL_DB_PASSWORD}@projectstool-postgres:5432/app
+            REDIS_URL: tcp://projectstool-redis:6379?password=${PROJECTSTOOL_REDIS_PASSWORD}
             MAILER_URL: null://localhost
             OAUTH_FACEBOOK_SECRET: ${PROJECTSTOOL_OAUTH_FACEBOOK_SECRET}
         depends_on:
             - projectstool-postgres
+            - projectstool-redis
     projectstool-php-cli:
         image: ${REGISTRY_ADDRESS}/projectstool-php-cli:${IMAGE_TAG}
         environment:
             APP_SECRET: ${PROJECTSTOOL_APP_SECRET}
             DATABASE_URL: pgsql://app:${PROJECTSTOOL_DB_PASSWORD}@projectstool-postgres:5432/app
+            REDIS_URL: tcp://projectstool-redis:6379?password=${PROJECTSTOOL_REDIS_PASSWORD}
             MAILER_URL: null://localhost
             OAUTH_FACEBOOK_SECRET: ${PROJECTSTOOL_OAUTH_FACEBOOK_SECRET}
         depends_on:
             - projectstool-postgres
+            - projectstool-redis
     projectstool-postgres:
         image: ${REGISTRY_ADDRESS}/projectstool-postgres:${IMAGE_TAG}
         restart: always
@@ -35,6 +39,13 @@ services:
             POSTGRES_USER: app
             POSTGRES_PASSWORD: ${PROJECTSTOOL_DB_PASSWORD}
             POSTGRES_DB: app
+    projectstool-redis:
+        image: redis:3.0-alpine
+        restart: always
+        volumes:
+            - projectstool-redis:/data
+        command: redis-server --requirepass ${PROJECTSTOOL_REDIS_PASSWORD}
 
 volumes:
     projectstool-postgres:
+    projectstool-redis:

@@ -53,12 +53,14 @@ build-production:
 	docker build --pull --file=projectstool/docker/production/php-fpm.docker --tag ${REGISTRY_ADDRESS}/projectstool-php-fpm:${IMAGE_TAG} projectstool
 	docker build --pull --file=projectstool/docker/production/php-cli.docker --tag ${REGISTRY_ADDRESS}/projectstool-php-cli:${IMAGE_TAG} projectstool
 	docker build --pull --file=projectstool/docker/production/postgres.docker --tag ${REGISTRY_ADDRESS}/projectstool-postgres:${IMAGE_TAG} projectstool
+	docker build --pull --file=projectstool/docker/production/redis.docker --tag ${REGISTRY_ADDRESS}/projectstool-redis:${IMAGE_TAG} projectstool
 
 push-production:
 	docker push ${REGISTRY_ADDRESS}/projectstool-nginx:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/projectstool-php-fpm:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/projectstool-php-cli:${IMAGE_TAG}
 	docker push ${REGISTRY_ADDRESS}/projectstool-postgres:${IMAGE_TAG}
+	docker push ${REGISTRY_ADDRESS}/projectstool-redis:${IMAGE_TAG}
 
 deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'rm -rf docker-compose.yml .env'
@@ -67,6 +69,7 @@ deploy-production:
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "IMAGE_TAG=${IMAGE_TAG}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "PROJECTSTOOL_APP_SECRET=${PROJECTSTOOL_APP_SECRET}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "PROJECTSTOOL_DB_PASSWORD=${PROJECTSTOOL_DB_PASSWORD}" >> .env'
+	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "PROJECTSTOOL_REDIS_PASSWORD=${PROJECTSTOOL_REDIS_PASSWORD}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'echo "PROJECTSTOOL_OAUTH_FACEBOOK_SECRET=${PROJECTSTOOL_OAUTH_FACEBOOK_SECRET}" >> .env'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose pull'
 	ssh -o StrictHostKeyChecking=no ${PRODUCTION_HOST} -p ${PRODUCTION_PORT} 'docker-compose --build -d'

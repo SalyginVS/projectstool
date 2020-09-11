@@ -18,6 +18,7 @@ services:
             - ./projectstool:/app
         depends_on:
             - projectstool-postgres
+            - projectstool-redis
             - mailer
     projectstool-php-cli:
         build:
@@ -28,6 +29,7 @@ services:
             - composer:/root/.composer/cache
         depends_on:
             - projectstool-postgres
+            - projectstool-redis
             - mailer
     projectstool-node-watch:
         image: node:11.13-alpine
@@ -50,7 +52,11 @@ services:
             POSTGRES_DB: app
         ports:
             - "54321:5432"
-
+    projectstool-redis:
+        image: redis:3.0-alpine
+        volumes:
+            - projectstool-redis:/data
+        command: redis-server --requirepass secret
     mailer:
         image: mailhog/mailhog
         ports:
@@ -58,4 +64,5 @@ services:
 
 volumes:
     projectstool-postgres:
+    projectstool-redis:
     composer:
