@@ -1,0 +1,17 @@
+@import "~@coreui/coreui/scss/coreui";
+@import "~simple-line-icons/scss/simple-line-icons";
+@import "~font-awesome/scss/font-awesome";
+
+main {
+    & > .container {
+        padding: 80px 15px 0;
+    }
+}
+
+.footer {
+    background-color: #f5f5f5;
+    & > .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}

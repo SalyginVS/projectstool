@@ -1,0 +1,61 @@
+version: '3'
+services:
+    projectstool-nginx:
+        build:
+            context: ./projectstool/docker/development
+            dockerfile: nginx.docker
+        volumes:
+            - ./projectstool:/app
+        depends_on:
+            - projectstool-php-fpm
+        ports:
+            - "8080:80"
+    projectstool-php-fpm:
+        build:
+            context: ./projectstool/docker/development
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./projectstool:/app
+        depends_on:
+            - projectstool-postgres
+            - mailer
+    projectstool-php-cli:
+        build:
+            context: ./projectstool/docker/development
+            dockerfile: php-cli.docker
+        volumes:
+            - ./projectstool:/app
+            - composer:/root/.composer/cache
+        depends_on:
+            - projectstool-postgres
+            - mailer
+    projectstool-node-watch:
+        image: node:11.13-alpine
+        volumes:
+            - ./projectstool:/app
+        working_dir: /app
+        command: sh -c "until [ -f .ready ] ; do sleep 1 ; done && npm run watch"
+    projectstool-node:
+        image: node:11.13-alpine
+        volumes:
+            - ./projectstool:/app
+        working_dir: /app
+    projectstool-postgres:
+        image: postgres:11.2-alpine
+        volumes:
+            - projectstool-postgres:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: app
+        ports:
+            - "54321:5432"
+
+    mailer:
+        image: mailhog/mailhog
+        ports:
+            - "8081:8025"
+
+volumes:
+    projectstool-postgres:
+    composer:
