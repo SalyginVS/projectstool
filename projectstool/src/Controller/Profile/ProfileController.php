@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-namespace App\Controller;
+namespace App\Controller\Profile;
 
 use App\ReadModel\User\UserFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +22,7 @@ class ProfileController extends AbstractController
      * @Route("/profile", name="profile")
      * @return Response
      */
-    public function index(): Response
+    public function show(): Response
     {
         $user = $this->users->findDetail($this->getUser()->getId());
 
