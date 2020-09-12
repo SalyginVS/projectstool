@@ -32,11 +32,11 @@
                 {% endif %}
                 <tr>
                     <th>Role</th>
-                    <td>{{ user.role }}</td>
+                    <td>{{ user_role(user.role) }}</td>
                 </tr>
                 <tr>
                     <th>Status</th>
-                    <td>{{ user.status }}</td>
+                    <td>{{ user_status(user.status) }}</td>
                 </tr>
                 </tbody>
             </table>
