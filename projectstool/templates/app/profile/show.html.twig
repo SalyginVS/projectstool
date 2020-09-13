@@ -16,28 +16,29 @@
         <div class="card-body">
             <table class="table table-bordered mb-0">
                 <tbody>
-                <tr>
-                    <th>ID</th>
-                    <td>{{ user.id }}</td>
-                </tr>
-                <tr>
-                    <th>Created</th>
-                    <td>{{ user.date|date('Y-m-d H:i:s') }}</td>
-                </tr>
-                {% if user.email %}
                     <tr>
                         <th>Email</th>
-                        <td>{{ user.email }}</td>
+                        <td>
+                            {{ user.email }}
+                            <a href="{{ path('profile.email') }}" class="btn btn-sm btn-outline-primary"><span class="fa fa-pencil"></span></a>
+                        </td>
                     </tr>
-                {% endif %}
-                <tr>
-                    <th>Role</th>
-                    <td>{{ user_role(user.role) }}</td>
-                </tr>
-                <tr>
-                    <th>Status</th>
-                    <td>{{ user_status(user.status) }}</td>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ user.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Created</th>
+                        <td>{{ user.date|date('Y-m-d H:i:s') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Role</th>
+                        <td>{{ user_role(user.role) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ user_status(user.status) }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
