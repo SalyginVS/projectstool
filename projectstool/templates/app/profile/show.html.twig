@@ -44,22 +44,22 @@
         </div>
     </div>
 
-    {% if user.networks %}
-        <div class="card">
-            <div class="card-header">Networks</div>
+    <div class="card">
+        <div class="card-header">Networks</div>
             <div class="card-body">
-                <table class="table table-bordered mb-0">
-                    <tbody>
-                    {% for network in user.networks %}
-                        <tr>
-                            <th>{{ network.network }}</th>
-                            <td>{{ network.identity }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+               {% if user.networks %}
+                    <table class="table table-bordered">
+                        <tbody>
+                        {% for network in user.networks %}
+                            <tr>
+                                <th>{{ network.network }}</th>
+                                <td>{{ network.identity }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+                <a href="{{ path('profile.oauth.facebook') }}" class="btn btn-facebook">Attach Facebook</a>
             </div>
-        </div>
-    {% endif %}
-
+    
 {% endblock %}
