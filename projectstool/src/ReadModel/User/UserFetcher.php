@@ -117,6 +117,8 @@ class UserFetcher
             ->select(
                 'id',
                 'date',
+                'name_first first_name',
+                'name_last last_name',
                 'email',
                 'role',
                 'status'
@@ -143,5 +145,13 @@ class UserFetcher
         $view->networks = $stmt->fetchAll();
 
         return $view;
+    }
+
+    public function getDetail(string $id): DetailView
+    {
+        if (!$detail = $this->findDetail($id)) {
+            throw new \LogicException('User is not found');
+        }
+        return $detail;
     }
 }
