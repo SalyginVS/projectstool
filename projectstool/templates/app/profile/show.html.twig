@@ -61,12 +61,33 @@
                             <tr>
                                 <th>{{ network.network }}</th>
                                 <td>{{ network.identity }}</td>
+                                <td>
+                                    <form
+                                            action="{{ url('profile.oauth.detach', {network: network.network, identity: network.identity}) }}"
+                                            method="post"
+                                            onsubmit="return confirm('Are you sure?')"
+                                    >
+                                        <input type="hidden" name="_method" value="DELETE" />
+                                        <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 {% endif %}
+                {% for network in user.networks %}
+                    {% if (network.network != 'facebook')   %}
+                     <a href="{{ path('profile.oauth.facebook') }}" class="btn btn-facebook">Attach Facebook</a>
+                    {% endif %}
+                {% endfor %}
+                {% if  user.networks == [] %}
                 <a href="{{ path('profile.oauth.facebook') }}" class="btn btn-facebook">Attach Facebook</a>
+                {% endif %}
             </div>
 
 {% endblock %}
