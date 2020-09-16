@@ -267,6 +267,11 @@ class User
         return $this->role;
     }
 
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
     /**
      * @return Network[]
      */
