@@ -114,6 +114,12 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
+    "knplabs/knp-components": {
+        "version": "v2.4.2"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v5.3.0"
+    },
     "knpuniversity/oauth2-client-bundle": {
         "version": "1.20",
         "recipe": {
@@ -249,6 +255,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.4.13"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.4.13"

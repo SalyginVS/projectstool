@@ -7,14 +7,18 @@ namespace App\ReadModel\User;
 use App\ReadModel\User\Filter\Filter;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class UserFetcher
 {
     private $connection;
+    private $paginator;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, PaginatorInterface $paginator )
     {
         $this->connection = $connection;
+        $this->paginator = $paginator;
     }
 
     public function existsByResetToken(string $token): bool
@@ -26,7 +30,6 @@ class UserFetcher
             ->setParameter(':token', $token)
             ->execute()->fetchColumn(0) > 0;
     }
-
 
     public function findForAuthByEmail(string $email): ?AuthView
     {
@@ -160,9 +163,13 @@ class UserFetcher
 
     /**
      * @param Filter $filter
-     * @return array[]
+     * @param int $page
+     * @param int $size
+     * @param string $sort
+     * @param string $direction
+     * @return PaginationInterface
      */
-    public function all(Filter $filter): array
+    public function all(Filter $filter, int $page, int $size, string $sort, string $direction): PaginationInterface
     {
         $qb = $this->connection->createQueryBuilder()
             ->select(
@@ -173,8 +180,7 @@ class UserFetcher
                 'role',
                 'status'
             )
-            ->from('user_users')
-            ->orderBy('date', 'desc');
+            ->from('user_users');
 
         if ($filter->name) {
             $qb->andWhere($qb->expr()->like('LOWER(CONCAT(name_first, \' \', name_last))', ':name'));
@@ -196,8 +202,12 @@ class UserFetcher
             $qb->setParameter(':role', $filter->role);
         }
 
-        $stmt = $qb->execute();
+        if (!\in_array($sort, ['date', 'name', 'email', 'role', 'status'], true)) {
+            throw new \UnexpectedValueException('Cannot sort by ' . $sort);
+        }
 
-        return $stmt->fetchAll(FetchMode::ASSOCIATIVE);
+        $qb->orderBy($sort, $direction === 'desc' ? 'desc' : 'asc');
+
+        return $this->paginator->paginate($qb, $page, $size);
     }
 }
