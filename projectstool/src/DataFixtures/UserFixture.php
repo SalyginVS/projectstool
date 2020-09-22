@@ -42,6 +42,22 @@ class UserFixture extends Fixture
 
         $manager->persist($user);
 
+
+        $user = User::signUpByEmail(
+            Id::next(),
+            new \DateTimeImmutable(),
+            new Name('User', 'User'),
+            new Email('user@app.test'),
+            $hash,
+            'token'
+        );
+
+        $user->confirmSignUp();
+
+        $manager->persist($user);
+
+
+
         $manager->flush();
     }
 }
