@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 
-namespace App\Controller\Auth\OAuth;
+namespace App\Controller\Profile\OAuth;
 
 use App\Model\User\UseCase\Network\Detach\Command;
 use App\Model\User\UseCase\Network\Detach\Handler;
@@ -48,7 +48,7 @@ class DetachController extends AbstractController
             $handler->handle($command);
             return $this->redirectToRoute('profile');
         } catch (\DomainException $e) {
-            $this->logger->error($e->getMessage(), ['exception' => $e]);
+            $this->logger->warning($e->getMessage(), ['exception' => $e]);
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('profile');
         }
